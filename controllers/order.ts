@@ -39,11 +39,6 @@ export async function createOrder(productId, token, puchaseData) {
       external_reference: order.id,
       notification_url:
         "https://dwf-m9-challenge.vercel.app/api/ipn/mercadopago",
-      back_urls: {
-        failure: "  ",
-        pending: "",
-        success: "",
-      },
     });
 
     return { preference, orderId: order.id };
