@@ -1,0 +1,12 @@
+import admin from "firebase-admin";
+
+const serviceAccount = JSON.parse(process.env.FS_KEY);
+
+if (admin.apps.length == 0) {
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+  });
+}
+const firestore = admin.firestore();
+
+export { firestore };
