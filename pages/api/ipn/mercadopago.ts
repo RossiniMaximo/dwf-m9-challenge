@@ -8,16 +8,14 @@ async function handlePost(req: NextApiRequest, res: NextApiResponse, token) {
   const { id, topic } = req.query;
   if (topic == "merchant_order") {
     const merchantOrder = await getMerchantOrder(id);
-    console.log({ merchantOrder });
-
     if (merchantOrder.order_status == "paid") {
       const orderId = merchantOrder.external_reference;
       console.log({ orderId });
       const order = new Order(orderId);
       await order.pull();
       order.data.status == "closed";
-      console.log({ order });
       await order.push();
+      console.log({ order });
       res.send(order);
     }
   }
