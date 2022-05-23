@@ -4,7 +4,7 @@ import { getMe } from "./user";
 import { createPreference } from "lib/connections/mercadopago";
 
 export async function createOrder(productId, token, puchaseData) {
-  const product = await productsIndex.getObject(productId);
+  const product = (await productsIndex.getObject(productId)) as any;
   debugger;
   if (!product) {
     throw "Product not found";
