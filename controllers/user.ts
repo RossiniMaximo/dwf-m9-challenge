@@ -12,7 +12,7 @@ export async function getMe(authId: string) {
 
 export async function updateData(data, token) {
   const user = await getMe(token.userId);
-  user.data.user_address = data;
+  user.data.user_address = data.adress;
   await user.push();
   return user.data;
 }
