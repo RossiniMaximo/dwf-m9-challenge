@@ -46,6 +46,6 @@ export async function createOrder(productId, token, puchaseData) {
       },
     });
 
-    return preference;
+    return { preference, orderId: order.id };
   }
 }

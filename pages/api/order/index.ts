@@ -12,7 +12,8 @@ async function handlePost(req: NextApiRequest, res: NextApiResponse, token) {
   }
   const userId = token.userId;
   const result = await createOrder(productId, userId, req.body);
-  res.send({ URL: result.init_point });
+  const { preference, orderId } = result;
+  res.send({ URL: preference.init_point, orderId });
 }
 
 async function handleGet(req: NextApiRequest, res: NextApiResponse, token) {

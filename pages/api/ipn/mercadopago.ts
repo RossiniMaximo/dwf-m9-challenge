@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import methods from "micro-method-router";
-import { authMiddleware } from "lib/middlewares/auth";
 import { getMerchantOrder } from "lib/connections/mercadopago";
 import { Order } from "models/order";
 
@@ -23,4 +22,6 @@ const handler = methods({
   post: handlePost,
 });
 
-export default authMiddleware(handler);
+export default handler;
+
+// tengo que sacar el user id de la order

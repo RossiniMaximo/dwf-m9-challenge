@@ -11,8 +11,10 @@ export async function getMe(authId: string) {
 }
 
 export async function updateData(data, token) {
+  console.log(data);
+
   const user = await getMe(token.userId);
-  user.data.user_address = data.adress;
+  user.data.user_address = data;
   await user.push();
   return user.data;
 }
