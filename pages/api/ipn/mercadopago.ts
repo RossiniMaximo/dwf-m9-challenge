@@ -2,16 +2,29 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import methods from "micro-method-router";
 import { getMerchantOrder } from "lib/connections/mercadopago";
 import { Order } from "models/order";
-import { loadDefaultErrorComponents } from "next/dist/server/load-components";
-import { User } from "models/user";
-import { isRegularExpressionLiteral } from "typescript";
-import { getMerchantOrderAndOrder } from "controllers/order";
+import { getUserOrder } from "controllers/order";
 
 async function handlePost(req: NextApiRequest, res: NextApiResponse) {
   const { id, topic } = req.query;
   if (topic == "merchant_order") {
-    const result = await getMerchantOrderAndOrder(id);
-    res.send(result);
+    const merchantOrder = await getMerchantOrder(id);
+    if (merchantOrder.order_status == "paid") {
+      const orderId = merchantOrder.external_reference;
+      const newOrder = new Order(orderId);
+      await newOrder.pull();
+      const userId = newOrder.data.user_id;
+      const { userOrder, user } = await getUserOrder(
+        { token: { userId } },
+        orderId
+      );
+      userOrder.status = "closed";
+      newOrder.data.status = "closed";
+      console.log({ userOrder });
+      console.log({ newOrder });
+      await user.push();
+      await newOrder.push();
+      res.send(true);
+    }
   }
 }
 

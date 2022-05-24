@@ -1,10 +1,7 @@
 import { productsIndex } from "lib/connections/algolia";
 import { Order } from "models/order";
 import { getMe } from "./user";
-import {
-  createPreference,
-  getMerchantOrder,
-} from "lib/connections/mercadopago";
+import { createPreference } from "lib/connections/mercadopago";
 
 export async function createOrder(productId, token, puchaseData) {
   const product = (await productsIndex.getObject(productId)) as any;
@@ -48,7 +45,6 @@ export async function createOrder(productId, token, puchaseData) {
 }
 
 export async function getUserOrder(token, orderId) {
-  console.log("el token", token);
   const authId = token.userId;
   const user: any = await getMe(authId);
   const getOrder = user.data.orders.find((order) => {
@@ -56,30 +52,5 @@ export async function getUserOrder(token, orderId) {
       return order;
     }
   });
-  console.log({ getOrder });
-
   return { userOrder: getOrder, user };
-}
-
-export async function getMerchantOrderAndOrder(id) {
-  const merchantOrder: any = await getMerchantOrder(id);
-  if (merchantOrder.order_status == "paid") {
-    const orderId = merchantOrder.external_reference;
-    const newOrder = new Order(orderId);
-    await newOrder.pull();
-    const userId = newOrder.data.user_id;
-    const { userOrder, user } = await getUserOrder(
-      { token: { userId } },
-      orderId
-    );
-    userOrder.status = "closed";
-    newOrder.data.status = "closed";
-    console.log({ userOrder: userOrder });
-    console.log({ userOrderStatus: userOrder.status });
-    await user.push();
-    await newOrder.push();
-    console.log({ userOrderDespuesDelPush: userOrder });
-    console.log({ userOrderStatusDespuesDelPush: userOrder.status });
-    return true;
-  }
 }
