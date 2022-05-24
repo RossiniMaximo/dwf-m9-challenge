@@ -2,8 +2,6 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import methods from "micro-method-router";
 import { authMiddleware } from "lib/middlewares/auth";
 import { createOrder, getUserOrder } from "controllers/order";
-import { User } from "models/user";
-import { getMe } from "controllers/user";
 
 async function handlePost(req: NextApiRequest, res: NextApiResponse, token) {
   const { productId } = req.query;

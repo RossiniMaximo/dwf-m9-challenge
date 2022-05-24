@@ -19,9 +19,9 @@ async function handlePost(req: NextApiRequest, res: NextApiResponse, token) {
       await user.pull();
       (user as any).data.orders.find(async (orders) => {
         if (orders.id == orderId) {
-          orders.status == "closed";
-          await user.push();
+          return orders.status == "closed";
         }
+        await user.push();
       });
       order.data.status = "closed";
       await order.push();
