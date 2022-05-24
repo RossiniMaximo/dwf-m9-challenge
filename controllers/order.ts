@@ -59,6 +59,8 @@ export async function getUserOrder(token, orderId) {
 }
 
 export async function getMerchantOrderAndOrder(id, token) {
+  console.log({ token });
+
   const merchantOrder: any = await getMerchantOrder(id);
   if (merchantOrder.order_status == "paid") {
     const orderId = merchantOrder.external_reference;
