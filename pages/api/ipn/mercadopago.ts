@@ -16,16 +16,17 @@ async function handlePost(req: NextApiRequest, res: NextApiResponse) {
       newOrder.data.status = "closed";
       await newOrder.push();
       console.log({ newOrder });
-      /*   const userId = newOrder.data.user_id;
+      const userId = newOrder.data.user_id;
       const user = new User(userId);
       await user.pull();
+      console.log({ user });
+
       const userOrder: any = user.data.orders.find((order: any) => {
         const result = order.orderId == orderId;
         return result;
       });
-      userOrder.orderStatus = "closed";
-      await user.push();
-      console.log({ userOrder }); */
+      console.log({ userOrder });
+
       res.send(true);
     }
   }

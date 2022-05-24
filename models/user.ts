@@ -30,7 +30,7 @@ export class User {
     this.data.email = newData.email;
     this.data.fullname = newData.fullname;
     this.data.user_address = newData.user_address || "";
-    this.data.orders = newData.orders;
+    this.data.orders = newData.orders || [{}];
   }
   async push() {
     await this.ref.update(this.data);
