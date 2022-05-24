@@ -25,6 +25,8 @@ async function handlePost(req: NextApiRequest, res: NextApiResponse) {
         const result = order.orderId == orderId;
         return result;
       });
+      userOrder.orderStatus = "closed";
+      await user.push();
       console.log({ userOrder });
 
       res.send(true);
