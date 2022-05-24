@@ -65,8 +65,7 @@ export async function getMerchantOrderAndOrder(id) {
     const newOrder = new Order(orderId);
     await newOrder.pull();
     const userId = newOrder.data.user_id;
-    console.log({ userId });
-    const { userOrder, user } = await getUserOrder(userId, orderId);
+    const { userOrder, user } = await getUserOrder({ userId }, orderId);
     userOrder.status = "closed";
     newOrder.data.status = "closed";
     await user.push();

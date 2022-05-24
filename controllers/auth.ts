@@ -3,6 +3,7 @@ import { User } from "../models/user";
 import { createToken } from "lib/connections/jwt";
 import addMinutes from "date-fns/addMinutes";
 import gen from "random-seed";
+import { sendEmail } from "controllers/email";
 
 const seed = "My Secret String Value";
 var random = gen.create(seed);
@@ -35,6 +36,7 @@ export async function sendCode(email, fullname) {
     auth.data.code = rand;
     auth.data.expiration = addMinutes(new Date(), 15);
     await auth.push();
+    const alertEmail = await sendEmail(email);
     return auth.data;
     // Send email
   }
