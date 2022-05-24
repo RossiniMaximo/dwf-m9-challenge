@@ -18,3 +18,9 @@ export async function updateData(data, token) {
   await user.push();
   return user.data;
 }
+
+export async function getUserOrders(token) {
+  const authId = token;
+  const user = await getMe(authId);
+  return { orders: user.data.orders };
+}

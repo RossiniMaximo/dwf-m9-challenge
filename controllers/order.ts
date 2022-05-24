@@ -43,3 +43,15 @@ export async function createOrder(productId, token, puchaseData) {
     return { preference, orderId: order.id };
   }
 }
+
+export async function getUserOrder(token, orderId) {
+  console.log({ token });
+  const authId = token.userId;
+  const user: any = await getMe(authId);
+  const getOrder = user.data.orders.find((order) => {
+    if (order.orderId == orderId) {
+      return order;
+    }
+  });
+  return getOrder;
+}

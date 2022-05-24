@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import methods from "micro-method-router";
 import { authMiddleware } from "lib/middlewares/auth";
-import { createOrder } from "controllers/order";
+import { createOrder, getUserOrder } from "controllers/order";
 import { User } from "models/user";
 import { getMe } from "controllers/user";
 
@@ -21,14 +21,8 @@ async function handleGet(req: NextApiRequest, res: NextApiResponse, token) {
   if (!orderId) {
     res.status(404).send({ error: "Order not found" });
   }
-  const authId = token.userId;
-  const user: any = await getMe(authId);
-  const getOrder = user.data.orders.find((order) => {
-    if (order.orderId == orderId) {
-      return order;
-    }
-  });
-  res.send(getOrder);
+  const order = await getUserOrder(token, orderId);
+  res.send({ order });
 }
 
 const handler = methods({
