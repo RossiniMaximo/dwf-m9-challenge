@@ -7,10 +7,10 @@ import { User } from "models/user";
 import { isRegularExpressionLiteral } from "typescript";
 import { getMerchantOrderAndOrder } from "controllers/order";
 
-async function handlePost(req: NextApiRequest, res: NextApiResponse, token) {
+async function handlePost(req: NextApiRequest, res: NextApiResponse) {
   const { id, topic } = req.query;
   if (topic == "merchant_order") {
-    const result = await getMerchantOrderAndOrder(id, token);
+    const result = await getMerchantOrderAndOrder(id);
     res.send(result);
   }
 }
