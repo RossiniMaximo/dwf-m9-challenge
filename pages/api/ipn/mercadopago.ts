@@ -20,11 +20,10 @@ async function handlePost(req: NextApiRequest, res: NextApiResponse, token) {
       (user as any).data.orders.find(async (orders) => {
         if (orders.id == orderId) {
           orders.status == "closed";
+          console.log({ orders });
           await user.push();
         }
       });
-      console.log({ user });
-
       order.data.status = "closed";
       await order.push();
       res.send(true);
