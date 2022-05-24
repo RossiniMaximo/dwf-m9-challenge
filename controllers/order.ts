@@ -56,6 +56,8 @@ export async function getUserOrder(token, orderId) {
       return order;
     }
   });
+  console.log({ getOrder });
+
   return { userOrder: getOrder, user };
 }
 
@@ -67,15 +69,17 @@ export async function getMerchantOrderAndOrder(id) {
     await newOrder.pull();
     const userId = newOrder.data.user_id;
     const { userOrder, user } = await getUserOrder(
-      { token: { userId: userId } },
+      { token: { userId } },
       orderId
     );
     userOrder.status = "closed";
     newOrder.data.status = "closed";
-    await user.push();
-    await newOrder.push();
     console.log({ userOrder: userOrder });
     console.log({ userOrderStatus: userOrder.status });
+    await user.push();
+    await newOrder.push();
+    console.log({ userOrderDespuesDelPush: userOrder });
+    console.log({ userOrderStatusDespuesDelPush: userOrder.status });
     return true;
   }
 }
