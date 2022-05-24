@@ -3,6 +3,8 @@ import methods from "micro-method-router";
 import { getMerchantOrder } from "lib/connections/mercadopago";
 import { Order } from "models/order";
 import { loadDefaultErrorComponents } from "next/dist/server/load-components";
+import { User } from "models/user";
+import { isRegularExpressionLiteral } from "typescript";
 
 async function handlePost(req: NextApiRequest, res: NextApiResponse, token) {
   const { id, topic } = req.query;
@@ -12,9 +14,19 @@ async function handlePost(req: NextApiRequest, res: NextApiResponse, token) {
       const orderId = merchantOrder.external_reference;
       const order = new Order(orderId);
       await order.pull();
+      const userId = order.data.user_id;
+      const user = new User(userId);
+      await user.pull();
+      (user as any).data.orders.find(async (orders) => {
+        if (orders.id == orderId) {
+          orders.status == "closed";
+          await user.push();
+        }
+      });
+      console.log({ user });
+
       order.data.status = "closed";
       await order.push();
-      console.log({ order });
       res.send(true);
     }
   }
@@ -26,5 +38,6 @@ const handler = methods({
 
 export default handler;
 
-// tengo que sacar el user id de la order y cambiarle el estado a la orden del usuario me parece
-// Este endpoint no esta andando
+// tengo que buscar la orden en su collection , sacarle el user id , buscar el user y modificarle
+// la orden a closed
+// tengo que pasar la logica a un controller.

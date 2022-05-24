@@ -23,7 +23,6 @@ export async function createOrder(productId, token, puchaseData) {
       orderStatus: order.data.status,
     });
     await user.push();
-
     const preference = await createPreference({
       items: [
         {
