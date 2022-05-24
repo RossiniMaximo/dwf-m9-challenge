@@ -19,8 +19,8 @@ async function handleGet(req: NextApiRequest, res: NextApiResponse, token) {
   if (!orderId) {
     res.status(404).send({ error: "Order not found" });
   }
-  const { order } = await getUserOrder(token, orderId);
-  res.send({ order });
+  const { userOrder } = await getUserOrder(token, orderId);
+  res.send({ userOrder });
 }
 
 const handler = methods({
