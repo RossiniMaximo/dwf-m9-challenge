@@ -58,20 +58,21 @@ export async function getUserOrder(token, orderId) {
   return { userOrder: getOrder, user };
 }
 
-export async function getMerchantOrderAndOrder(id, token) {
-  console.log({ token });
-
+export async function getMerchantOrderAndOrder(id) {
   const merchantOrder: any = await getMerchantOrder(id);
   if (merchantOrder.order_status == "paid") {
     const orderId = merchantOrder.external_reference;
     const newOrder = new Order(orderId);
     await newOrder.pull();
-    const { userOrder, user } = await getUserOrder(token, orderId);
+    const userId = newOrder.data.user_id;
+    console.log({ userId });
+    const { userOrder, user } = await getUserOrder(userId, orderId);
     userOrder.status = "closed";
     newOrder.data.status = "closed";
     await user.push();
-    console.log({ userOrder });
     await newOrder.push();
+    console.log({ userOrder: userOrder });
+    console.log({ userOrderStatus: userOrder.status });
     return true;
   }
 }
