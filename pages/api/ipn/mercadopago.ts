@@ -3,6 +3,7 @@ import methods from "micro-method-router";
 import { getMerchantOrder } from "lib/connections/mercadopago";
 import { Order } from "models/order";
 import { getUserOrder } from "controllers/order";
+import { User } from "models/user";
 
 async function handlePost(req: NextApiRequest, res: NextApiResponse) {
   const { id, topic } = req.query;
@@ -15,6 +16,16 @@ async function handlePost(req: NextApiRequest, res: NextApiResponse) {
       newOrder.data.status = "closed";
       await newOrder.push();
       console.log({ newOrder });
+      const userId = newOrder.data.user_id;
+      const user = new User(userId);
+      await user.pull();
+      const userOrder: any = user.data.orders.find((order: any) => {
+        const result = order.orderId == orderId;
+        return result;
+      });
+      userOrder.orderStatus = "closed";
+      await user.push();
+      console.log({ userOrder });
       res.send(true);
     }
   }
