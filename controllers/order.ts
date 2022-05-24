@@ -48,6 +48,7 @@ export async function createOrder(productId, token, puchaseData) {
 }
 
 export async function getUserOrder(token, orderId) {
+  console.log("el token", token);
   const authId = token.userId;
   const user: any = await getMe(authId);
   const getOrder = user.data.orders.find((order) => {
