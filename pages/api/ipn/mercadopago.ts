@@ -16,14 +16,18 @@ async function handlePost(req: NextApiRequest, res: NextApiResponse, token) {
       await order.pull();
       const userId = order.data.user_id;
       const user = new User(userId);
+      console.log("user antes de ser iterado", user);
       await user.pull();
       (user as any).data.orders.find(async (orders) => {
         if (orders.id == orderId) {
+          console.log("order encontrada =", orders);
           return orders.status == "closed";
         }
         await user.push();
       });
       order.data.status = "closed";
+      console.log("User final =", user);
+
       await order.push();
       res.send(true);
     }
