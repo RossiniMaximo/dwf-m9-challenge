@@ -36,7 +36,15 @@ export async function sendCode(email, fullname) {
     auth.data.code = rand;
     auth.data.expiration = addMinutes(new Date(), 15);
     await auth.push();
-    const alertEmail = await sendEmail(email);
+    const alertEmail = await sendEmail(
+      email,
+      "Authorization",
+      "Your code :" +
+        auth.data.code +
+        " " +
+        "It expires at : " +
+        auth.data.expiration
+    );
     return auth.data;
     // Send email
   }
