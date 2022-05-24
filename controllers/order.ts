@@ -1,7 +1,11 @@
 import { productsIndex } from "lib/connections/algolia";
 import { Order } from "models/order";
 import { getMe } from "./user";
-import { createPreference } from "lib/connections/mercadopago";
+import {
+  createPreference,
+  getMerchantOrder,
+} from "lib/connections/mercadopago";
+import { User } from "models/user";
 
 export async function createOrder(productId, token, puchaseData) {
   const product = (await productsIndex.getObject(productId)) as any;
@@ -53,4 +57,30 @@ export async function getUserOrder(token, orderId) {
     }
   });
   return { userOrder: getOrder, user };
+}
+
+export async function paidMercadopagoIPNController(id, topic) {
+  if (topic == "merchant_order") {
+    const merchantOrder = await getMerchantOrder(id);
+    if (merchantOrder.order_status == "paid") {
+      const orderId = merchantOrder.external_reference;
+      const newOrder = new Order(orderId);
+      await newOrder.pull();
+      newOrder.data.status = "closed";
+      await newOrder.push();
+      console.log({ newOrder });
+      const userId = newOrder.data.user_id;
+      const user = new User(userId);
+      await user.pull();
+      console.log({ user });
+      const userOrder: any = user.data.orders.find((order: any) => {
+        const result = order.orderId == orderId;
+        return result;
+      });
+      userOrder.orderStatus = "closed";
+      await user.push();
+      console.log({ userOrder });
+      return true;
+    }
+  }
 }

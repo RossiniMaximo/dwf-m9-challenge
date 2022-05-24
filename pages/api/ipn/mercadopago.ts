@@ -1,37 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import methods from "micro-method-router";
-import { getMerchantOrder } from "lib/connections/mercadopago";
-import { Order } from "models/order";
-import { getUserOrder } from "controllers/order";
-import { User } from "models/user";
+import { paidMercadopagoIPNController } from "controllers/order";
 
 async function handlePost(req: NextApiRequest, res: NextApiResponse) {
   const { id, topic } = req.query;
-  if (topic == "merchant_order") {
-    const merchantOrder = await getMerchantOrder(id);
-    if (merchantOrder.order_status == "paid") {
-      const orderId = merchantOrder.external_reference;
-      const newOrder = new Order(orderId);
-      await newOrder.pull();
-      newOrder.data.status = "closed";
-      await newOrder.push();
-      console.log({ newOrder });
-      const userId = newOrder.data.user_id;
-      const user = new User(userId);
-      await user.pull();
-      console.log({ user });
-
-      const userOrder: any = user.data.orders.find((order: any) => {
-        const result = order.orderId == orderId;
-        return result;
-      });
-      userOrder.orderStatus = "closed";
-      await user.push();
-      console.log({ userOrder });
-
-      res.send(true);
-    }
-  }
+  const result = await paidMercadopagoIPNController(id, topic);
+  res.send(result);
 }
 
 const handler = methods({
