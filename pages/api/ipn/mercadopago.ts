@@ -12,17 +12,9 @@ async function handlePost(req: NextApiRequest, res: NextApiResponse) {
       const orderId = merchantOrder.external_reference;
       const newOrder = new Order(orderId);
       await newOrder.pull();
-      const userId = newOrder.data.user_id;
-      const { userOrder, user } = await getUserOrder(
-        { token: { userId } },
-        orderId
-      );
-      userOrder.status = "closed";
       newOrder.data.status = "closed";
-      console.log({ userOrder });
-      console.log({ newOrder });
-      await user.push();
       await newOrder.push();
+      console.log({ newOrder });
       res.send(true);
     }
   }
