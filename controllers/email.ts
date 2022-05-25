@@ -4,9 +4,9 @@ export async function sendEmail(to, subject, text) {
   const msg = {
     to: to,
     from: "maximorossini2016@gmail.com",
-    subject: "Sending with SendGrid is Fun",
+    subject: subject,
     text: text,
-    html: "<strong>${subject}</strong>",
+    html: `<div>${text}</div>`,
   };
   sgMail
     .send(msg)

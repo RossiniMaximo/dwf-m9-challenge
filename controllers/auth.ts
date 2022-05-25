@@ -8,7 +8,7 @@ import { sendEmail } from "controllers/email";
 const seed = "My Secret String Value";
 var random = gen.create(seed);
 
-async function findOrCreate(email, fullname) {
+export async function findOrCreate(email: string, fullname: string) {
   const res = await Auth.findByEmail(email);
   if (res) {
     return res;
@@ -27,7 +27,7 @@ async function findOrCreate(email, fullname) {
   }
 }
 
-export async function sendCode(email, fullname) {
+export async function sendCode(email: string, fullname: string) {
   const res = await findOrCreate(email, fullname);
   if (res) {
     const rand = random.intBetween(10000, 99999);
@@ -40,16 +40,16 @@ export async function sendCode(email, fullname) {
       email,
       "Authorization",
       "Your code :" +
+        " " +
         auth.data.code +
         " " +
         "It expires at : " +
         auth.data.expiration
     );
     return auth.data;
-    // Send email
   }
 }
-// invalidate the code if res exists
+
 export async function searchByCodeAndEmail(email: string, code: number) {
   const authSnap = await Auth.findbyEmailAndCode(email, code);
   if (authSnap) {

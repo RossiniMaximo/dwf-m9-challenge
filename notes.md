@@ -9,3 +9,7 @@ I have to send emails.
 I have to test some function and scheme some endpoints.
 
 I left working on : ME endpoint , database is not returning any data
+
+Things left :
+
+Send emails , use yup to have some control over a few endpoints and tests on some functions
