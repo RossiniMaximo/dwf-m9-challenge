@@ -1,3 +1,4 @@
+import { isAfter } from "date-fns";
 import { firestore } from "../lib/connections/firestore";
 
 const collection = firestore.collection("auths");
@@ -26,6 +27,11 @@ export class Auth {
       auth.data = res.docs[0].data();
       return auth;
     }
+  }
+  checkExpiration() {
+    const now = new Date();
+    const check = isAfter(now, this.data.expiration.toDate());
+    return check;
   }
   static async createAuth(data) {
     const authSnap = await collection.add(data);

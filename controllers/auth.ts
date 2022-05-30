@@ -55,10 +55,11 @@ export async function searchByCodeAndEmail(email: string, code: number) {
   if (authSnap) {
     const auth = new Auth(authSnap.id);
     await auth.pull();
-    auth.data.code = "invalidated";
-    auth.data.expiration = "invalidated";
-    await auth.push();
-    if (auth) {
+    const expirated = auth.checkExpiration();
+    if (!expirated) {
+      auth.data.code = "invalidated";
+      auth.data.expiration = "invalidated";
+      await auth.push();
       const token = createToken({ userId: authSnap.id });
       return token;
     }
