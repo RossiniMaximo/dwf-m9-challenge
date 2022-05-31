@@ -9,14 +9,15 @@ const seed = "My Secret String Value";
 var random = gen.create(seed);
 
 export async function findOrCreate(email: string, fullname: string) {
+  const flatEmail = email.trim().toLowerCase();
   const res = await Auth.findByEmail(email);
   if (res) {
     return res;
   } else {
-    const user = await User.createUser({ email, fullname });
+    const user = await User.createUser({ email: flatEmail, fullname });
     if (user) {
       const auth = await Auth.createAuth({
-        email,
+        email: flatEmail,
         ia: new Date(),
         code: "",
         expiration: "",

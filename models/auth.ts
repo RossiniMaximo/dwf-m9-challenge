@@ -34,6 +34,7 @@ export class Auth {
     return check;
   }
   static async createAuth(data) {
+    data.email.trim().toLowerCase();
     const authSnap = await collection.add(data);
     const auth = new Auth(authSnap.id);
     auth.data = data;

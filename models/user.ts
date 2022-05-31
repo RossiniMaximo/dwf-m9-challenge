@@ -36,6 +36,7 @@ export class User {
     await this.ref.update(this.data);
   }
   static async createUser(data) {
+    data.email.trim().toLowerCase();
     const userSnap = await collection.add(data);
     const user = new User(userSnap.id);
     user.data = data;
