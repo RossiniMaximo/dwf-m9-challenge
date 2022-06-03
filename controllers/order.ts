@@ -57,7 +57,12 @@ export async function getUserOrder(token, orderId) {
       return order;
     }
   });
-  return { userOrder: getOrder, user };
+  if (getOrder == undefined) {
+    return { userOrder: undefined };
+  }
+  if (getOrder) {
+    return { userOrder: getOrder, user };
+  }
 }
 
 export async function paidMercadopagoIPNController(id, topic) {
