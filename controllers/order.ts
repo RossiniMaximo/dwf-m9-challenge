@@ -92,6 +92,7 @@ export async function paidMercadopagoIPNController(id, topic) {
         "Purchase information : ",
         "You have paid the product"
       );
+      console.log({ purchaseEmail });
       if (purchaseEmail) {
         return true;
       }
