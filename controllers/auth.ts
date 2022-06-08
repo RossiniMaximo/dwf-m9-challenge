@@ -3,7 +3,7 @@ import { User } from "../models/user";
 import { createToken } from "lib/connections/jwt";
 import addMinutes from "date-fns/addMinutes";
 import gen from "random-seed";
-import { sendEmail } from "controllers/email";
+import { sendAuthMail } from "lib/connections/sendgrid";
 
 const seed = "My Secret String Value";
 
@@ -12,19 +12,16 @@ export async function findOrCreate(email: string, fullname: string) {
   const res = await Auth.findByEmail(email);
   if (res) {
     return res;
-  } else {
-    const user = await User.createUser({ email: flatEmail, fullname });
-    if (user) {
-      const auth = await Auth.createAuth({
-        email: flatEmail,
-        ia: new Date(),
-        code: "",
-        expiration: "",
-        userId: user.id,
-      });
-      return auth;
-    }
   }
+  const user = await User.createUser({ email: flatEmail, fullname });
+  const auth = await Auth.createAuth({
+    email: flatEmail,
+    ia: new Date(),
+    code: "",
+    expiration: "",
+    userId: user.id,
+  });
+  return auth;
 }
 
 export async function sendCode(email: string, fullname: string) {
@@ -37,38 +34,25 @@ export async function sendCode(email: string, fullname: string) {
     auth.data.code = rand;
     auth.data.expiration = addMinutes(new Date(), 15);
     await auth.push();
-    const alertEmail = await sendEmail(
+    const alertEmail = await sendAuthMail(
       email,
-      "Authorization",
-      "Your code :" +
-        " " +
-        auth.data.code +
-        " " +
-        "It expires at : " +
-        auth.data.expiration
+      auth.data.code,
+      auth.data.expiration
     );
-    console.log("hola si que ejecuto los logs");
-
-    console.log({ alertEmail });
-
-    if (alertEmail) {
-      return true;
-    }
+    return true;
   }
 }
 
 export async function searchByCodeAndEmail(email: string, code: number) {
   const authSnap = await Auth.findbyEmailAndCode(email, code);
-  if (authSnap) {
-    const auth = new Auth(authSnap.id);
-    await auth.pull();
-    const expirated = auth.checkExpiration();
-    if (!expirated) {
-      auth.data.code = "invalidated";
-      auth.data.expiration = "invalidated";
-      await auth.push();
-      const token = createToken({ userId: authSnap.id });
-      return token;
-    }
+  const auth = new Auth(authSnap.id);
+  await auth.pull();
+  const expirated = auth.checkExpiration();
+  if (!expirated) {
+    auth.data.code = "invalidated";
+    auth.data.expiration = "invalidated";
+    await auth.push();
+    const token = createToken({ userId: authSnap.id });
+    return token;
   }
 }

@@ -13,3 +13,17 @@ export function authMiddleware(callback) {
     }
   };
 }
+export function authMiddlewareForSchema(
+  req: NextApiRequest,
+  res: NextApiResponse,
+  callback
+) {
+  const token = req.headers.authorization.split(" ")[1];
+  if (!token) {
+    res.status(401).send({ msg: "Need to authenticate" });
+  }
+  const verify = decode(token);
+  if (verify) {
+    callback(req, res, verify);
+  }
+}

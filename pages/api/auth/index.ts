@@ -2,8 +2,9 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import methods from "micro-method-router";
 import { sendCode } from "../../../controllers/auth";
 import * as yup from "yup";
+import { schemasMiddleware } from "lib/middlewares/yup";
 
-let authBodySchema = yup
+const authBodySchema = yup
   .object()
   .shape({
     email: yup.string().required(),
@@ -13,18 +14,15 @@ let authBodySchema = yup
   .strict();
 
 async function handlePost(req: NextApiRequest, res: NextApiResponse) {
-  try {
-    await authBodySchema.validate(req.body);
-  } catch (error) {
-    res.status(400).send({ error });
-  }
   const { email, fullname } = req.body;
   const result = await sendCode(email, fullname);
   res.send(result);
 }
 
+const postHandlerValidate = schemasMiddleware(handlePost, authBodySchema);
+
 const handler = methods({
-  post: handlePost,
+  post: postHandlerValidate,
 });
 
 export default handler;
