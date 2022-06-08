@@ -6,7 +6,6 @@ import gen from "random-seed";
 import { sendEmail } from "controllers/email";
 
 const seed = "My Secret String Value";
-let random = gen.create(seed);
 
 export async function findOrCreate(email: string, fullname: string) {
   const flatEmail = email.trim().toLowerCase();
@@ -31,6 +30,7 @@ export async function findOrCreate(email: string, fullname: string) {
 export async function sendCode(email: string, fullname: string) {
   const res = await findOrCreate(email, fullname);
   if (res) {
+    let random = gen.create(seed);
     let rand = random.intBetween(10000, 99999);
     const auth = new Auth(res.id);
     await auth.pull();
@@ -47,7 +47,9 @@ export async function sendCode(email: string, fullname: string) {
         "It expires at : " +
         auth.data.expiration
     );
-    return auth.data;
+    if (alertEmail) {
+      return true;
+    }
   }
 }
 

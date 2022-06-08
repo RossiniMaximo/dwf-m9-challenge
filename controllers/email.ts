@@ -8,12 +8,13 @@ export async function sendEmail(to, subject, text) {
     text: text,
     html: `<div>${text}</div>`,
   };
-  sgMail
+  const send = sgMail
     .send(msg)
-    .then(() => {
-      console.log("Email sent");
-    })
+    .then(() => {})
     .catch((error) => {
       console.error(error);
     });
+  if (send) {
+    return true;
+  }
 }
