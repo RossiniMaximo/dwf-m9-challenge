@@ -47,6 +47,10 @@ export async function sendCode(email: string, fullname: string) {
         "It expires at : " +
         auth.data.expiration
     );
+    console.log("hola si que ejecuto los logs");
+
+    console.log({ alertEmail });
+
     if (alertEmail) {
       return true;
     }
