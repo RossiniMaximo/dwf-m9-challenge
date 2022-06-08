@@ -69,17 +69,13 @@ export async function paidMercadopagoIPNController(id, topic) {
   if (topic == "merchant_order") {
     const merchantOrder = await getMerchantOrder(id);
     if (merchantOrder.order_status == "paid") {
-      console.log({ merchantOrder });
-
       const orderId = merchantOrder.external_reference;
       const newOrder = new Order(orderId);
       await newOrder.pull();
       newOrder.data.status = "closed";
       await newOrder.push();
-      console.log({ newOrder });
       const userId = newOrder.data.user_id;
       const user = new User(userId);
-      console.log({ user });
       await user.pull();
       const userOrder: any = user.data.orders.find((order: any) => {
         const result = order.orderId == orderId;
@@ -87,9 +83,7 @@ export async function paidMercadopagoIPNController(id, topic) {
       });
       userOrder.orderStatus = "closed";
       await user.push();
-      console.log("email de usuario antes de mandar mail : ", user.data.email);
       const purchaseEmail = await purchaseAlertMail(user.data.email);
-      console.log({ purchaseEmail });
       if (purchaseEmail) {
         return true;
       }
