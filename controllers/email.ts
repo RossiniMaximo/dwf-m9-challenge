@@ -10,7 +10,9 @@ export async function sendEmail(to, subject, text) {
   };
   const send = sgMail
     .send(msg)
-    .then(() => {})
+    .then(() => {
+      console.log("Email sent");
+    })
     .catch((error) => {
       console.error(error);
     });
