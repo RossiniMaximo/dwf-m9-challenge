@@ -1,4 +1,4 @@
-export function handleBody(body) {
+export function getHitsOfProducts(body) {
   const result = body.hits.map((item) => {
     return {
       fields: item.fields,

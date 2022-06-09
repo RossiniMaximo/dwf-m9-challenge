@@ -1,12 +1,12 @@
 import { productsIndex } from "lib/connections/algolia";
-import { handleBody } from "lib/middlewares/algolia";
+import { getHitsOfProducts } from "lib";
 
 export async function getProducts(query, limit, offset) {
   const result = await productsIndex.search(query, {
     offset: Number(offset),
     length: Number(limit),
   });
-  const body = handleBody(result);
+  const body = getHitsOfProducts(result);
   return {
     wholeData: result,
     body,
