@@ -43,11 +43,17 @@ export class Auth {
     }
   }
   static async findbyEmailAndCode(email: string, code: number) {
+    console.log("email and code in findbyEmailAndCode :", email, code);
+
     const beautify = email.trim().toLowerCase();
+    console.log("beautify", beautify);
+
     const res = await collection
       .where("email", "==", beautify)
       .where("code", "==", code)
       .get();
+    console.log("res :", res);
+
     if (res.docs.length) {
       console.log("Res.docs", res.docs);
 
