@@ -49,7 +49,11 @@ export class Auth {
       .where("code", "==", code)
       .get();
     if (res.docs.length) {
+      console.log("Res.docs", res.docs);
+
       const id = res.docs[0].id;
+      console.log("res.docs[0].id", res.docs[0].id);
+
       const auth = new Auth(id);
       auth.data = res.docs[0].data();
       return auth;

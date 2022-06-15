@@ -45,6 +45,8 @@ export async function sendCode(email: string, fullname: string) {
 
 export async function searchByCodeAndEmail(email: string, code: number) {
   const authSnap = await Auth.findbyEmailAndCode(email, code);
+  console.log("authSnap", authSnap);
+
   const auth = new Auth(authSnap.id);
   await auth.pull();
   const expirated = auth.checkExpiration();
