@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import methods from "micro-method-router";
 import { queryMiddleware } from "lib/middlewares/request";
 import { getProducts } from "controllers/products";
+import { corsMiddleware } from "lib/middlewares/cors";
 
 async function handleGet(req: NextApiRequest, res: NextApiResponse) {
   const query = req.query.q as string;
@@ -21,4 +22,4 @@ const handler = methods({
   get: handleGet,
 });
 
-export default handler;
+export default corsMiddleware(handler);

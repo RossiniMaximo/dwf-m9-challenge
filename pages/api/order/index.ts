@@ -1,9 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import methods from "micro-method-router";
 import { authMiddleware } from "lib/middlewares/auth";
+import { corsMiddleware } from "lib/middlewares/cors";
+import { schemasMiddleware } from "lib/middlewares/yup";
 import { createOrder, getUserOrder } from "controllers/order";
 import * as yup from "yup";
-import { schemasMiddleware } from "lib/middlewares/yup";
 
 const orderBodySchema = yup
   .object()
@@ -60,4 +61,4 @@ const handler = methods({
   get: authMiddleware(handleGetAuthorizated),
 });
 
-export default handler;
+export default corsMiddleware(handler);

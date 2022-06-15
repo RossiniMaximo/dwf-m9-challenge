@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import methods from "micro-method-router";
 import { searchByCodeAndEmail } from "controllers/auth";
+import { corsMiddleware } from "lib/middlewares/cors";
 import * as yup from "yup";
 
 let tokenBodySchema = yup
@@ -31,4 +32,4 @@ const handler = methods({
   post: handlePost,
 });
 
-export default handler;
+export default corsMiddleware(handler);
