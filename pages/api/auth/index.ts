@@ -26,4 +26,4 @@ const handler = methods({
   post: postHandlerValidate,
 });
 
-export default corsMiddleware(handler);
+export default handler;

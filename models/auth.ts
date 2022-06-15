@@ -43,15 +43,12 @@ export class Auth {
     }
   }
   static async findbyEmailAndCode(email: string, code: number) {
-    console.log("email and code in findbyEmailAndCode :", email, code);
     const beautify = email.trim().toLowerCase();
     const res = await collection
       .where("email", "==", beautify)
       .where("code", "==", code)
       .get();
-    console.log("res length:", res.docs.length);
     if (res.docs.length) {
-      console.log("Res.docs", res.docs);
       const id = res.docs[0].id;
       const auth = new Auth(id);
       auth.data = res.docs[0].data();
