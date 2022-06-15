@@ -1,11 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { decode } from "lib/connections/jwt";
-import { corsMiddleware } from "./cors";
+import { cors } from "./cors";
 
 export function authMiddleware(callback) {
-  return function (req: NextApiRequest, res: NextApiResponse) {
+  return async function (req: NextApiRequest, res: NextApiResponse) {
     try {
-      corsMiddleware();
+      cors(req, res);
       const token = req.headers.authorization.split(" ")[1];
       if (!token) {
         res.status(401).send({ msg: "Need to authenticate" });

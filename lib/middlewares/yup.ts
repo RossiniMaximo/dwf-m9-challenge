@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { corsMiddleware } from "./cors";
+import { cors } from "./cors";
 
 export function schemasMiddleware(callback, bodySchema?, querySchema?) {
   return async function (
@@ -7,7 +7,7 @@ export function schemasMiddleware(callback, bodySchema?, querySchema?) {
     res: NextApiResponse
   ): Promise<void> {
     try {
-      corsMiddleware();
+      cors(req, res);
       if (req.body) {
         await bodySchema.validate(req.body);
         callback(req, res);

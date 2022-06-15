@@ -1,6 +1,4 @@
-import { corsMiddleware } from "./cors";
 export function queryMiddleware(body, maxLimit = 25, maxOffset = 24) {
-  corsMiddleware();
   const queryLimit = body.query.limit;
   const queryOffset = body.query.offset;
 

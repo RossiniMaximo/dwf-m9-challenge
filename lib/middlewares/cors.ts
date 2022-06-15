@@ -12,18 +12,9 @@ function initMiddleware(middleware) {
     });
 }
 
-const cors = initMiddleware(
+export const cors = initMiddleware(
   Cors({
-    methods: ["GET", "POST", "OPTIONS"],
-    origin: "http://localhost:3000",
+    methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
+    origin: "*",
   })
 );
-
-export function corsMiddleware(callback?) {
-  return async function (req, res) {
-    await cors(req, res);
-    if (callback) {
-      callback(req, res);
-    }
-  };
-}
