@@ -15,6 +15,7 @@ function initMiddleware(middleware) {
 const cors = initMiddleware(
   Cors({
     methods: ["GET", "POST", "OPTIONS"],
+    origin: "http//localhost:3000",
   })
 );
 

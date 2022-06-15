@@ -19,12 +19,8 @@ async function handlePost(req: NextApiRequest, res: NextApiResponse) {
   } catch (error) {
     res.status(400).send({ error });
   }
-  console.log("request body :", req.body);
-
   const { email, code } = req.body;
   const result = await searchByCodeAndEmail(email, code);
-  console.log("result of searchByCodeAndEmail :", result);
-
   if (result) {
     res.send({ token: result });
   } else {
