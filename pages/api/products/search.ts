@@ -18,8 +18,10 @@ async function handleGet(req: NextApiRequest, res: NextApiResponse) {
   });
 }
 
+const handleGetCors = corsMiddleware(handleGet);
+
 const handler = methods({
-  get: handleGet,
+  get: handleGetCors,
 });
 
-export default corsMiddleware(handler);
+export default handler;

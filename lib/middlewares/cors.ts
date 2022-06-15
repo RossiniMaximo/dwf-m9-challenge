@@ -19,8 +19,11 @@ const cors = initMiddleware(
   })
 );
 
-export function corsMiddleware() {
+export function corsMiddleware(callback?) {
   return async function (req, res) {
     await cors(req, res);
+    if (callback) {
+      callback(req, res);
+    }
   };
 }

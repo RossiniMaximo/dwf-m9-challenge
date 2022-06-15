@@ -3,7 +3,6 @@ import methods from "micro-method-router";
 import { sendCode } from "../../../controllers/auth";
 import * as yup from "yup";
 import { schemasMiddleware } from "lib/middlewares/yup";
-import { corsMiddleware } from "lib/middlewares/cors";
 
 const authBodySchema = yup
   .object()

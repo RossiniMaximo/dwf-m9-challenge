@@ -15,4 +15,4 @@ const handler = methods({
   get: getAuthValidation,
 });
 
-export default corsMiddleware(handler);
+export default handler;

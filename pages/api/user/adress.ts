@@ -16,4 +16,4 @@ const handler = methods({
   patch: patchAuthValidation,
 });
 
-export default corsMiddleware(handler);
+export default handler;
