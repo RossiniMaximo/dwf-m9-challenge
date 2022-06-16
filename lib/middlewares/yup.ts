@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import NextCors from "nextjs-cors";
+/* import NextCors from "nextjs-cors"; */
 /* import { cors } from "./cors"; */
 
 export function schemasMiddleware(callback, bodySchema?, querySchema?) {
@@ -8,11 +8,12 @@ export function schemasMiddleware(callback, bodySchema?, querySchema?) {
     res: NextApiResponse
   ): Promise<void> {
     //  await cors(req, res);
-    await NextCors(req, res, {
-      methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
-      origin: "*",
-      optionsSuccessStatus: 200,
-    });
+    // neither do work
+    // await NextCors(req, res, {
+    //   methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
+    //   origin: "*",
+    //   optionsSuccessStatus: 200,
+    // });
     if (req.body) {
       await bodySchema.validate(req.body);
       callback(req, res);

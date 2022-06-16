@@ -19,10 +19,10 @@ async function handlePost(req: NextApiRequest, res: NextApiResponse) {
   res.send(result);
 }
 
-const postHandlerValidate = schemasMiddleware(handlePost, authBodySchema);
+const postSchemaValidation = schemasMiddleware(handlePost, authBodySchema);
 
 const handler = methods({
-  post: postHandlerValidate,
+  post: postSchemaValidation,
 });
 
 export default handler;

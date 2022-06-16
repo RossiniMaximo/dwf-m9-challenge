@@ -49,7 +49,7 @@ async function handleGet(req: NextApiRequest, res: NextApiResponse, token) {
   }
   res.send({ userOrder });
 }
-const handleGetAuthorized = authMiddleware(handleGet);
+const getAuthorizationValidation = authMiddleware(handleGet);
 
 const handler = methods({
   post: schemasMiddleware(
@@ -57,7 +57,7 @@ const handler = methods({
     orderBodySchema,
     orderQuerySchema
   ),
-  get: authMiddleware(handleGetAuthorized),
+  get: getAuthorizationValidation,
 });
 
 export default handler;

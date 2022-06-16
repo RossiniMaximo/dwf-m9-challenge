@@ -19,3 +19,10 @@ export const cors = initMiddleware(
     origin: ["http://localhost:3000"],
   })
 );
+
+export function corsMiddleware(callback) {
+  return async function (req, res) {
+    await cors(req, res);
+    callback();
+  };
+}
