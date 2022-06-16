@@ -5,7 +5,6 @@ import { updateData } from "controllers/user";
 import { cors } from "lib/middlewares/cors";
 
 async function handlePatch(req: NextApiRequest, res: NextApiResponse, token) {
-  cors(req, res);
   const newData = req.body;
   const result = await updateData(newData, token);
   res.send({ result });

@@ -2,10 +2,8 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import methods from "micro-method-router";
 import { queryMiddleware } from "lib/middlewares/request";
 import { getProducts } from "controllers/products";
-import { cors } from "lib/middlewares/cors";
 
 async function handleGet(req: NextApiRequest, res: NextApiResponse) {
-  cors(req, res);
   const query = req.query.q as string;
   const { limit, offset } = queryMiddleware(req);
   const { wholeData, body } = await getProducts(query, limit, offset);
