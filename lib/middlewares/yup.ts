@@ -7,7 +7,8 @@ export function schemasMiddleware(callback, bodySchema?, querySchema?) {
     res: NextApiResponse
   ): Promise<void> {
     try {
-      await cors(req, res);
+      const corsCheck = await cors(req, res);
+      console.log("corsCheck in yup middleware :", corsCheck);
       if (req.body) {
         await bodySchema.validate(req.body);
         callback(req, res);
