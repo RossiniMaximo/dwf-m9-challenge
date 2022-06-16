@@ -7,7 +7,7 @@ export function schemasMiddleware(callback, bodySchema?, querySchema?) {
     res: NextApiResponse
   ): Promise<void> {
     try {
-      cors(req, res);
+      await cors(req, res);
       if (req.body) {
         await bodySchema.validate(req.body);
         callback(req, res);

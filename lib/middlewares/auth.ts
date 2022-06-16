@@ -5,7 +5,7 @@ import { cors } from "./cors";
 export function authMiddleware(callback) {
   return async function (req: NextApiRequest, res: NextApiResponse) {
     try {
-      cors(req, res);
+      await cors(req, res);
       const token = req.headers.authorization.split(" ")[1];
       if (!token) {
         res.status(401).send({ msg: "Need to authenticate" });
