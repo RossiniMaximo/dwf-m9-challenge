@@ -1,8 +1,8 @@
 import Cors from "cors";
-import type {NextApiRequest,NextApiResponse} from "next"
+import type { NextApiRequest, NextApiResponse } from "next";
 
 function initMiddleware(middleware) {
-  return (req:NextApiRequest, res:NextApiResponse) =>
+  return (req: NextApiRequest, res: NextApiResponse) =>
     new Promise((resolve, reject) => {
       middleware(req, res, (result) => {
         if (result instanceof Error) {
@@ -16,6 +16,6 @@ function initMiddleware(middleware) {
 export const cors = initMiddleware(
   Cors({
     methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
-    origin: "*",
+    origin: ["http://localhost:3000"],
   })
 );
