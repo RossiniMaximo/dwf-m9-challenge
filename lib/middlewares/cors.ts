@@ -1,7 +1,8 @@
 import Cors from "cors";
+import type {NextApiRequest,NextApiResponse} from "next"
 
 function initMiddleware(middleware) {
-  return (req, res) =>
+  return (req:NextApiRequest, res:NextApiResponse) =>
     new Promise((resolve, reject) => {
       middleware(req, res, (result) => {
         if (result instanceof Error) {
