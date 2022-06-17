@@ -2,10 +2,8 @@ import { Auth } from "../models/auth";
 import { User } from "../models/user";
 import { createToken } from "lib/connections/jwt";
 import addMinutes from "date-fns/addMinutes";
-import gen from "random-seed";
 import { sendAuthMail } from "lib/connections/sendgrid";
-
-const seed = "My Secret String Value";
+import randomIntegerfrom from "random-int";
 
 export async function findOrCreate(email: string, fullname: string) {
   const flatEmail = email.trim().toLowerCase();
@@ -27,11 +25,10 @@ export async function findOrCreate(email: string, fullname: string) {
 export async function sendCode(email: string, fullname: string) {
   const res = await findOrCreate(email, fullname);
   if (res) {
-    let random = gen.create(seed);
-    let rand = random.intBetween(10000, 99999);
+    let random = randomIntegerfrom(10000, 99999);
     const auth = new Auth(res.id);
     await auth.pull();
-    auth.data.code = rand;
+    auth.data.code = random;
     auth.data.expiration = addMinutes(new Date(), 15);
     await auth.push();
     const alertEmail = await sendAuthMail(
