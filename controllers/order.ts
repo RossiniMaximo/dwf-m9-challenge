@@ -86,6 +86,8 @@ export async function paidMercadopagoIPNController(id, topic) {
       });
       userOrder.orderStatus = "closed";
       await user.push();
+      console.log(userOrder);
+
       const purchaseEmail = await purchaseAlertMail(user.data.email);
       if (purchaseEmail) {
         return true;
