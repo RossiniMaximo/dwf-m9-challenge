@@ -25,11 +25,9 @@ const orderQuerySchema = yup
 async function handlePost(req: NextApiRequest, res: NextApiResponse, token) {
   const { productId } = req.query;
   if (!productId) {
-    res.status(404).send({ error: "Product ID has not matches" });
+    res.status(404).send({ error: "Product ID needed" });
   }
-  console.log({ token });
   const userId = token.userId;
-
   const result = await createOrder(productId, userId, req.body);
   const { preference, orderId } = result;
 
@@ -41,8 +39,6 @@ async function handleGet(req: NextApiRequest, res: NextApiResponse, token) {
   if (!orderId) {
     res.status(404).send({ error: "Order not found" });
   }
-  console.log({ token });
-
   const { userOrder } = await getUserOrder(token, orderId);
   if (!userOrder) {
     res.send({ error: "Order does not exist" });

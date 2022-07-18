@@ -5,6 +5,7 @@ type userData = {
   email: string;
   fullname: string;
   user_address: any;
+  phone_number: string;
   id: string;
   orders: [{}];
 };
@@ -20,6 +21,7 @@ export class User {
       email: "",
       fullname: "",
       user_address: "",
+      phone_number: "",
       id: id,
       orders: [{}],
     };
@@ -30,6 +32,7 @@ export class User {
     this.data.email = newData.email;
     this.data.fullname = newData.fullname;
     this.data.user_address = newData.user_address || "";
+    this.data.phone_number = newData.phone_number || "";
     this.data.orders = newData.orders || [{}];
   }
   async push() {

@@ -2,12 +2,16 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import methods from "micro-method-router";
 import { authMiddleware } from "lib/middlewares/auth";
 import { updateData } from "controllers/user";
-import { cors } from "lib/middlewares/cors";
+
+// modify it to make it receive the phone number
 
 async function handlePatch(req: NextApiRequest, res: NextApiResponse, token) {
-  const newData = req.body;
-  const result = await updateData(newData, token);
-  res.send({ result });
+  const result = await updateData(req.body, token);
+  if (result) {
+    res.send(true);
+  } else {
+    res.send(false);
+  }
 }
 
 const patchAuthValidation = authMiddleware(handlePatch);

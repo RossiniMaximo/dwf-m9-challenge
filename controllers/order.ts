@@ -8,15 +8,14 @@ import {
 import { User } from "models/user";
 import { purchaseAlertMail } from "lib/connections/sendgrid";
 
-export async function createOrder(productId, token, puchaseData) {
+export async function createOrder(productId, token, purchaseData) {
   const product = (await productsIndex.getObject(productId)) as any;
-  debugger;
   if (!product) {
     throw "Product not found";
   }
   const user = await getMe(token);
   const order = await Order.createOrder({
-    purchase_data: puchaseData,
+    purchase_data: purchaseData,
     productId,
     user_id: user.id,
     status: "pending",
@@ -27,6 +26,7 @@ export async function createOrder(productId, token, puchaseData) {
       orderId: order.id,
       orderStatus: order.data.status,
     });
+    // BACK URLS IS THE KEY TO HAVE THE USERS RETURNING TO OUR PAGE AFTER PAYING
     await user.push();
     const preference = await createPreference({
       items: [
@@ -40,6 +40,9 @@ export async function createOrder(productId, token, puchaseData) {
           unit_price: product.fields["Unit cost"],
         },
       ],
+      back_urls: {
+        success: "https://dwf-m10-challenge.vercel.app/thanks",
+      },
       external_reference: order.id,
       notification_url:
         "https://dwf-m9-challenge.vercel.app/api/ipn/mercadopago",
