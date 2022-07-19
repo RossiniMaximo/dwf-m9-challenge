@@ -8,6 +8,7 @@ type userData = {
   phone_number: string;
   id: string;
   orders: [{}];
+  favourites: [];
 };
 
 export class User {
@@ -24,6 +25,7 @@ export class User {
       phone_number: "",
       id: id,
       orders: [{}],
+      favourites: [],
     };
   }
   async pull() {
@@ -34,6 +36,7 @@ export class User {
     this.data.user_address = newData.user_address || "";
     this.data.phone_number = newData.phone_number || "";
     this.data.orders = newData.orders || [{}];
+    this.data.favourites = newData.favourites || [];
   }
   async push() {
     await this.ref.update(this.data);
