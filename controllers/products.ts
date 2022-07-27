@@ -12,9 +12,16 @@ export async function getProducts(query, limit, offset) {
     body,
   };
 }
+export async function getAllProductsIds() {
+  const products = await productsIndex.search("");
+  const productsData = getHitsOfProducts(products);
+  const ids = productsData.map((p) => p.objectID);
+  return ids;
+}
 
 export async function getProduct(id: string) {
   const result = await productsIndex.getObject(id);
+
   if (result) {
     return result;
   } else {
