@@ -31,11 +31,7 @@ export async function sendCode(email: string, fullname: string) {
     auth.data.code = random;
     auth.data.expiration = addMinutes(new Date(), 15);
     await auth.push();
-    const alertEmail = await sendAuthMail(
-      email,
-      auth.data.code,
-      auth.data.expiration
-    );
+    await sendAuthMail(email, auth.data.code, auth.data.expiration);
     return true;
   }
 }
