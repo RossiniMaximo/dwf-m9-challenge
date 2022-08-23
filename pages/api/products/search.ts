@@ -3,7 +3,7 @@ import methods from "micro-method-router";
 import { queryMiddleware } from "lib/middlewares/request";
 import { getProducts } from "controllers/products";
 async function handleGet(req: NextApiRequest, res: NextApiResponse) {
-  const query = req.query.query as string;
+  const query = req.query.query;
   const { limit, offset } = queryMiddleware(req);
   if (query != undefined) {
     const { wholeData, body } = await getProducts(query, limit, offset);
