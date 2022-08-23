@@ -37,7 +37,7 @@ export async function createOrder(productId, token, purchaseData) {
           category_id: "car_electronics",
           quantity: 1,
           currency_id: "ARS",
-          unit_price: product.fields["Unit cost"],
+          unit_price: product.fields["Unit Cost"],
         },
       ],
       back_urls: {
