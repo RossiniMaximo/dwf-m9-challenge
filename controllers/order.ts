@@ -71,6 +71,8 @@ export async function getUserOrder(token, orderId) {
 export async function paidMercadopagoIPNController(id, topic) {
   if (topic == "merchant_order") {
     const merchantOrder = await getMerchantOrder(id);
+    console.log({ merchantOrder });
+
     if (merchantOrder.order_status == "paid") {
       const orderId = merchantOrder.external_reference;
       const newOrder = new Order(orderId);
