@@ -31,7 +31,7 @@ export async function sendCode(email: string, fullname: string) {
     auth.data.code = random;
     auth.data.expiration = addMinutes(new Date(), 15);
     await auth.push();
-    sendAuthEmail({
+    await sendAuthEmail({
       email,
       fullname: fullname,
       code: auth.data.code,

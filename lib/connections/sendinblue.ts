@@ -2,9 +2,11 @@ import SibApiV3Sdk from "sib-api-v3-sdk";
 SibApiV3Sdk.ApiClient.instance.authentications["api-key"].apiKey =
   process.env.SENDINBLUE_API_KEY;
 
-export function sendAuthEmail(body) {
-  return new SibApiV3Sdk.TransactionalEmailsApi()
-    .sendTransacEmail({
+export async function sendAuthEmail(body) {
+  console.log("entre");
+
+  const result =
+    await new SibApiV3Sdk.TransactionalEmailsApi().sendTransacEmail({
       sender: { email: "maximorossini2016@gmail.com", name: "Maximo" },
       subject: "Authorization code",
       htmlContent:
@@ -25,19 +27,12 @@ export function sendAuthEmail(body) {
           subject: "¡Thank you for signing in!",
         },
       ],
-    })
-    .then(
-      function (data) {
-        console.log(data);
-      },
-      function (error) {
-        console.error(error);
-      }
-    );
+    });
+  return result;
 }
-export function sendPurchaseEmail(body) {
-  return new SibApiV3Sdk.TransactionalEmailsApi()
-    .sendTransacEmail({
+export async function sendPurchaseEmail(body) {
+  const result =
+    await new SibApiV3Sdk.TransactionalEmailsApi().sendTransacEmail({
       sender: { email: "maximorossini2016@gmail.com", name: "Maximo" },
       subject: "Authorization code",
       htmlContent:
@@ -58,13 +53,6 @@ export function sendPurchaseEmail(body) {
           subject: "¡Thanks for buying!",
         },
       ],
-    })
-    .then(
-      function (data) {
-        console.log(data);
-      },
-      function (error) {
-        console.error(error);
-      }
-    );
+    });
+  return result;
 }
