@@ -6,7 +6,7 @@ import {
   getMerchantOrder,
 } from "lib/connections/mercadopago";
 import { User } from "models/user";
-import { purchaseAlertMail } from "lib/connections/sendgrid";
+import { sendPurchaseEmail } from "lib/connections/sendinblue";
 
 export async function createOrder(productId, token, purchaseData) {
   const product = (await productsIndex.getObject(productId)) as any;
@@ -82,13 +82,16 @@ export async function paidMercadopagoIPNController(id, topic) {
       await user.pull();
       const userOrder: any = user.data.orders.find((order: any) => {
         const result = order.orderId == orderId;
+
         return result;
       });
       userOrder.orderStatus = "closed";
       await user.push();
-      console.log(userOrder);
-
-      const purchaseEmail = await purchaseAlertMail(user.data.email);
+      const purchaseEmail = sendPurchaseEmail({
+        email: user.data.email,
+        fullname: user.data.fullname,
+        name: "",
+      });
       if (purchaseEmail) {
         return true;
       }

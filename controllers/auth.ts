@@ -2,7 +2,7 @@ import { Auth } from "../models/auth";
 import { User } from "../models/user";
 import { createToken } from "lib/connections/jwt";
 import addMinutes from "date-fns/addMinutes";
-import { sendAuthMail } from "lib/connections/sendgrid";
+import { sendAuthEmail } from "lib/connections/sendinblue";
 import randomIntegerfrom from "random-int";
 
 export async function findOrCreate(email: string, fullname: string) {
@@ -31,7 +31,12 @@ export async function sendCode(email: string, fullname: string) {
     auth.data.code = random;
     auth.data.expiration = addMinutes(new Date(), 15);
     await auth.push();
-    await sendAuthMail(email, auth.data.code, auth.data.expiration);
+    await sendAuthEmail({
+      email,
+      fullname: fullname,
+      code: auth.data.code,
+      expiration: auth.data.expiration,
+    });
     return true;
   }
 }
