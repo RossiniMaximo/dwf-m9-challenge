@@ -10,8 +10,7 @@ import { sendPurchaseEmail } from "lib/connections/sendinblue";
 
 export async function createOrder(productId, token, purchaseData) {
   const product = (await productsIndex.getObject(productId)) as any;
-  console.log("PRODUCT : ",product);
-  
+
   if (!product) {
     throw "Product not found";
   }
@@ -39,7 +38,7 @@ export async function createOrder(productId, token, purchaseData) {
           category_id: "car_electronics",
           quantity: 1,
           currency_id: "ARS",
-          unit_price: product.fields["Unit Cost"],
+          unit_price: product.fields["Unit cost"],
         },
       ],
       back_urls: {
