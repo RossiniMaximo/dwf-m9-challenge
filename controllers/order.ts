@@ -10,6 +10,8 @@ import { sendPurchaseEmail } from "lib/connections/sendinblue";
 
 export async function createOrder(productId, token, purchaseData) {
   const product = (await productsIndex.getObject(productId)) as any;
+  console.log("PRODUCT : ",product);
+  
   if (!product) {
     throw "Product not found";
   }
